@@ -1,4 +1,4 @@
-LIHKG WEB Client Demo
+ÔªøLIHKG WEB Client Demo
 
 BY summer~@mysunshine
 
@@ -16,8 +16,8 @@ ALSO YOU MAY USE ADOBE PHONEGAP BUILDER TO PACK IT INTO WEBAPPS
 Hope you have a miracle experience start from my demo code.
 
 Special thanks.
-1.≥s•ß¶Ì
-2.[nodegin](https://github.com/nodegin/linkg-web
-3.[Colloque TSUI](https://github.com/colloquet/lihkg-web
-4.HKG+
-5.±Êª∑
+1. ÈÄ£Â∞º‰Ωè
+2. [nodegin](https://github.com/nodegin/linkg-web
+3. [Colloque TSUI](https://github.com/colloquet/lihkg-web
+4. HKG+
+5. ÊúõÈÅ†
