@@ -1,6 +1,7 @@
+
 <html lang='zh-tw'>
 <head>
-<title>test</title>
+<title>LIHKG client</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
@@ -13,7 +14,7 @@ body{/**
     user-select: none;
 	margin-bottom: 1in;
 	 **/
-	font-size: 6mm;
+	font-size: 4mm;
 }
 .item {
 	text-align:     center;
@@ -26,6 +27,10 @@ body{/**
 	padding: 1mm;
 }
 .template {display:none}
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
 .g {
 	clear:both;
 }
@@ -47,39 +52,36 @@ body{/**
 #div { box-shadow: 0px 0px 0px 1px #f00;}
 
 @media screen and (min-width: 35.5em) {
-	.u-hide,.u-hide-m,.u-hide-l,.u-hide-x {
-		display:block;
-	}
-	.u-hide-s {
-		display:none;
-	}
-}
-@media screen and (min-width: 48em) {
-	.u-hide-s,.u-hide,.u-hide-l,.u-hide-x {
-		display:block;
-	}
-	.u-hide-m {
-		display:none;
-	}
-}
-@media screen and (min-width: 64em) {
-	.u-hide-s,.u-hide-m,.u-hide,.u-hide-x {
-		display:block;
-	}
-	.u-hide-l {
-		display:none;
-	}
-}
-@media screen and (min-width: 80em) {
-	.u-hide,.u-hide-s,.u-hide-m,.u-hide-l,.u-hide-x {
-		display:block;
-	}
 }
 </style>
 </head>
 <script>
-var PAGE = 1;
-var POST_PAGE = 1;
+Date.prototype.toString = function() {
+	return "{0}/{1}/{2} {3}:{4}:{5}".format(
+		this.getFullYear(),
+		this.getMonth()+1,
+		this.getDate(),
+		this.getHours(),
+		this.getMinutes(),
+		this.getSeconds()
+	);
+};
+Element.prototype.isShow = function() {
+	return this.style.display == "block";
+};
+Element.prototype.toggle = function() {
+	if(this.style.display == "block")
+		this.style.display = "none";
+	else
+		this.style.display = "block";
+};
+
+Element.prototype.show = function() {
+	this.style.display = "block";
+};
+Element.prototype.hide = function() {
+	this.style.display = "none";
+};
 (function(e){
 	e.$ = document;
 })(window);
@@ -92,22 +94,18 @@ if (!String.prototype.format) {
 });
   };
 }
+</script>
+<script>
+var PAGE = 1;
+var POST_PAGE = 1;
+var UINF = "";
+const IMG_PHOTO = "data:image/gif;base64,R0lGODlhZABGAPcAAAAAAAEBAQICAgMDAwQEBAUFBQYGBgcHBwgICAkJCQoKCgsLCwwMDA0NDQ4ODg8PDxAQEBERERISEhMTExQUFBUVFRYWFhcXFxgYGBkZGRoaGhsbGxwcHB0dHR4eHh8fHyAgICEhISIiIiMjIyQkJCUlJSYmJicnJygoKCkpKSoqKisrKywsLC0tLS4uLi8vLzAwMDExMTIyMjMzMzQ0NDU1NTY2Njc3Nzg4ODk5OTo6Ojs7Ozw8PD09PT4+Pj8/P0BAQEFBQUJCQkNDQ0REREVFRUZGRkdHR0hISElJSUpKSktLS0xMTE1NTU5OTk9PT1BQUFFRUVJSUlNTU1RUVFVVVVZWVldXV1hYWFlZWVpaWltbW1xcXF1dXV5eXl9fX2BgYGFhYWJiYmNjY2RkZGVlZWZmZmdnZ2hoaGlpaWpqamtra2xsbG1tbW5ubm9vb3BwcHFxcXJycnNzc3R0dHV1dXZ2dnd3d3h4eHl5eXp6ent7e3x8fH19fX5+fn9/f4CAgIGBgYKCgoODg4SEhIWFhYaGhoeHh4iIiImJiYqKiouLi4yMjI2NjY6Ojo+Pj5CQkJGRkZKSkpOTk5SUlJWVlZaWlpeXl5iYmJmZmZqampubm5ycnJ2dnZ6enp+fn6CgoKGhoaKioqOjo6SkpKWlpaampqenp6ioqKmpqaqqqqurq6ysrK2tra6urq+vr7CwsLGxsbKysrOzs7S0tLW1tba2tre3t7i4uLm5ubq6uru7u7y8vL29vb6+vr+/v8DAwMHBwcLCwsPDw8TExMXFxcbGxsfHx8jIyMnJycrKysvLy8zMzM3Nzc7Ozs/Pz9DQ0NHR0dLS0tPT09TU1NXV1dbW1tfX19jY2NnZ2dra2tvb29zc3N3d3d7e3t/f3+Dg4OHh4eLi4uPj4+Tk5OXl5ebm5ufn5+jo6Onp6erq6uvr6+zs7O3t7e7u7u/v7/Dw8PHx8fLy8vPz8/T09PX19fb29vf39/j4+Pn5+fr6+vv7+/z8/P39/f7+/njoGCH5BAkAAP8ALAAAAABkAEYAAAj+AP8JHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqZJinpcuXMPOsTBmzpsuZKFuylInTpM6FP3uGhLnTptGjSJMenVizqNKnUKMGdfhSqMebD6da5agVKM+tHbsqFAv2IlmEZ8tSTGuQrdqIbgnGfUv1a8O5Zm2KxPuPr0SoH/n6zUq0beGNgu1qPDy26mLFXsNiJTwYLeTGXMXqLTjZYmLEWp/Krcz5ckLSB0M7Ht0Z9cDPGSevPo21M1PTlmMHnd34p224uFMHJzz671fXsD3vHlwbdfKKy4fT5ulcevG8r63TFlgdouu+y5XVcyf9/HZ27Zapoy/tfb3w7Bh9u4dPXPz4+OrXrv8eHjt4/e35959/5O03H3v3EXjggHUJ+N2ABQZoH3gLjpefefVB1x+AFHLYoIMVQlhheRh2eNuFJd4VooXnGafeiAbqdp2EDKa4k27H/ZbeixOq+FiObjmmI40+Plbab4w9SKKGionWooBF/ihcTIatmOCHoPnFm4ZE/hgXY1DeGBiYFg7JZYZjKjVmlyAZtVeMdMmIZpxn1mVlnFo++JaZ00nl55+AbmlnoIQWuhSdiCaq6KKMIhoQADs=";
+
 function dom_ready(event) {
-    /*
-	var d  = $.querySelector('#tpl_data').innerHTML;
-	var d2 = $.createElement("div");d2.className="pure-g";
-	
-	for(var i = 0; i < 10; i++) {
-		d2.insertAdjacentHTML("beforeend",
-			d.format(i,
-				Math.floor(Math.random()*20),
-				Math.floor(Math.random()*20),
-				Math.floor(Math.random()*20)
-			)
-		);
-	}
-	$.body.appendChild(d2);
-	*/
+	/**
+	 * init id
+	 */
+	localStorage.removeItem('uinf');
 	/**
 	 * fetch forum list
 	 */
@@ -116,10 +114,10 @@ function dom_ready(event) {
 	}).then(function(response) {
 		return response.json();
 	}).then(function(j){
-		var cboCategory = $.querySelector('#cboCategory');
+		let cboCategory = $.querySelector('#cboCategory');
 		j.response.category_list.forEach(function(item,index){
 			//console.log(item);
-			var d2 = $.createElement("option");
+			let d2 = $.createElement("option");
 			d2.value = item['cat_id'];
 			d2.text  = item['name'];
 			cboCategory.add(d2);
@@ -136,7 +134,7 @@ function dom_ready(event) {
 }
 document.addEventListener("DOMContentLoaded", dom_ready);
 function _load_thread_list(catId,page) {
-	var url = "";
+	let url = "";
 	if (catId === '1') {
       url = 'latest?' // 吹水台 (全部)
     } else if (catId === '2') {
@@ -146,63 +144,93 @@ function _load_thread_list(catId,page) {
     } else {
       url = "category?cat_id={0}&".format(catId);
     }
-	url = "https://lihkg.com/api_v1/thread/{0}page={1}&count=50".format(url,page);
+	url = `https://lihkg.com/api_v1/thread/${url}page=${page}&count=50`;
 	//console.log(url);
 	fetch(url, {
 		method: 'get'
 	}).then(function(response) {
 		return response.json();
 	}).then(function(j){
-		var apps = $.querySelector('#apps');
+		let apps = $.querySelector('#apps');
 		//console.log(apps);return 1;
 		//apps.innerHTML = '';
-		var e = $.querySelector('#tpl_thread_list');
-		var et = e.innerHTML;
+		let e = $.querySelector('div#tpl_thread_list');
+		let et = e.innerHTML;
 		j.response.items.forEach(function(item,index) {
-			var d = e.cloneNode(false);
+			let d = e.cloneNode(false);
 				d.id = "";
-			var dd = new Date(item.last_reply_time*1000);
-			var dt = "{0}/{1}/{2} {3}:{4}:{5}".format(
-				dd.getFullYear(),
-				dd.getMonth()+1,
-				dd.getDate(),
-				dd.getHours(),
-				dd.getMinutes(),
-				dd.getSeconds()
-			);
+			let dd = new Date(item.last_reply_time*1000);
 			d.innerHTML = et.format(
 				item.title,
 				item.user.nickname,
-				dt,
-				item.like_count,
-				item.dislike_count,
+				dd,
+				item.like_count - item.dislike_count,
 				item.no_of_reply
 			);
 			d.style.display = "block";
-			d.onclick = function() {
+			let like_count = item.like_count - item.dislike_count;
+			if(like_count > 100) {
+				d.querySelectorAll("div")[0].style.color = "#F33";
+			} else if(like_count < 0) {
+				d.querySelectorAll("div")[0].style.color = "#999";
+			}
+			d.querySelectorAll("*")[1].onclick = function() {
 				//console.log("https://lihkg.com/api_v1/thread/{0}/page/1".format(item.thread_id));
+				//$.querySelector('#apps').style.display = "none";
+				_hideAll();
+				_disable_scroll();
 				$.querySelector('#posts').style.display = "block";
 				$.querySelector('#post_data').innerHTML = "";
 				POST_PAGE = 1;
+				// story mode event
+				$.querySelector('div#btnStoryMode').onclick = function(){
+					$.querySelector('#post_data').innerHTML = "";
+					if(this.innerText === "故") {
+						_load_thread(item.thread_id, 1, 1);
+						this.innerText = "普";
+					} else {
+						_load_thread(item.thread_id, 1, 0);
+						this.innerText = "故";
+					}
+				};
+				/** **/
 				_load_thread(item.thread_id, POST_PAGE);
 			};
+			if(item.total_page > 1) {
+				let select = d.querySelector("select");
+				for(let i = 1; i < item.total_page; i++) {
+					let d2 = $.createElement("option");
+					d2.value = i+1;
+					d2.text  = i+1;
+					select.add(d2);
+				}
+				select.style.display = "block";
+				select.onchange = function() {
+					_hideAll();
+					_disable_scroll();
+					$.querySelector('#posts').style.display = "block";
+					$.querySelector('#post_data').innerHTML = "";
+					POST_PAGE = this.options[this.selectedIndex].value;
+					_load_thread(item.thread_id, POST_PAGE);
+				};
+			}
 			apps.appendChild(d);
 		});
-		var d = $.createElement("div");
-		d.style.minHeight = "10mm";
-		d.style.margin = "auto";
-		d.style.textAlign = "center";
-		d.style.backgroundColor = "#FCC";
-		d.style.clear = "both";
-		d.innerHTML = "LOAD PAGE "+(PAGE+1);
+		//
+		let d = $.querySelector("div#tpl_thread_next").cloneNode(false);
+		d.show();
+		//d.innerHTML = "LOAD PAGE "+(PAGE+1);
+		d.innerHTML = "蘇咪摩亞..."
 		d.onclick = function() {
-			var ts = document.body.scrollTop;
+			d.innerHTML = "蘇寧..."
+			let ts = document.body.scrollTop;
 			//apps.removeChild(this);
 			PAGE++;
-			var cat = $.querySelector('#cboCategory');
+			let cat = $.querySelector('#cboCategory');
 			_load_thread_list(cat.options[cat.selectedIndex].value,PAGE);
 			//document.body.scrollTop = ts;
 			this.onclick = null;
+			this.parentElement.removeChild(this);
 		};
 		apps.appendChild(d);
 	}).catch(function(err) {
@@ -210,68 +238,93 @@ function _load_thread_list(catId,page) {
 		console.log(err);
 	});
 }
-function _load_thread(tid,page) {
+function _load_thread(tid,page,pm=0) {
 	//console.log("tid",tid,"page",page)
-	url = "https://lihkg.com/api_v1/thread/{0}/page/{1}".format(tid,page);
+	let url = "https://lihkg.com/api_v1/thread/{0}/page/{1}".format(tid,page);
 	console.log(url);//return;
 	fetch(url, {
 		method: 'get'
 	}).then(function(response) {
 		return response.json();
 	}).then(function(j){
-		console.log(j);
-		var post_head = $.querySelector('#post_head');
-		var tph = $.querySelector('#tpl_post_head').innerHTML;
+		let post_head = $.querySelector('#post_head');
+		let tph = $.querySelector('#tpl_post_head').innerHTML;
 		post_head.innerHTML = tph.format(j.response.title,
 			j.response.like_count,
 			j.response.dislike_count,
 			j.response.user.nickname);
 		//var tpd = $.querySelector('#tpl_post_data').innerHTML;
-		var post_head = $.querySelector('#post_data');
+		let post_data = $.querySelector('#post_data');
+		let pm_id = j.response.user.user_id;
 		j.response.item_data.forEach(function(item,index) {
-			var d = $.querySelector('#tpl_post_data').cloneNode(true);
+			if(pm && item.user.user_id != pm_id) return;
+			let d = $.querySelector('#tpl_post_data').cloneNode(true);
 			d.id = "";
-			var dd = new Date(item.reply_time*1000);
-			var dt = "{0}/{1}/{2} {3}:{4}:{5}".format(
-				dd.getFullYear(),
-				dd.getMonth()+1,
-				dd.getDate(),
-				dd.getHours(),
-				dd.getMinutes(),
-				dd.getSeconds()
-			);
+			let dd = new Date(item.reply_time*1000);
 			d.innerHTML = d.innerHTML.format(index+(page-1)*25+1,
 				item.user.nickname,
-				dt,
+				dd,
 				item.msg);
-			d.querySelectorAll(".hkgmoji").forEach(function(item,index) {
+			// clean blockquote
+			d.querySelectorAll("blockquote > blockquote > blockquote").forEach(function(item,index){
+				item.parentElement.removeChild(item);
+			});
+			//
+			d.querySelectorAll("img.hkgmoji").forEach(function(item,index) {
 				var src = item.src.indexOf("/asset");
 				item.src = "https://lihkg.com"+item.src.substr(src);
 			});
 			d.querySelectorAll("img").forEach(function(item,index) {
-				if(item.className=="hkgmoji") return;
+				if(item.className==="hkgmoji") return;
 				item.className = "u-img";
+				item.alt = item.src;
+				item.src = IMG_PHOTO;
+				item.onclick = function() {
+					this.src = this.alt;
+					this.onclick = null;
+				};
 			});
 			d.style.display = "block";
 			post_data.appendChild(d);
 		});
+		//$.querySelector('form#frmReply > input#tid').value = tid;
+		//$.querySelector('form#frmReply > textarea#content').value = "";
+		
 		// page
-		if(POST_PAGE < j.response.total_page ) {
-			var d = $.createElement("div");
-			d.style.minHeight = "10mm";
-			d.style.margin = "auto";
-			d.style.textAlign = "center";
-			d.style.backgroundColor = "#FCC";
-			d.style.clear = "both";
-			d.innerHTML = "LOAD PAGE "+(POST_PAGE+1);
+		if(j.response.page < j.response.total_page ) {
+			if(pm) {
+				_load_thread(j.response.thread_id, parseInt(j.response.page) + 1, 1);
+				return;
+			}
+			let d = $.querySelector("div#tpl_thread_next").cloneNode(false);
+			d.show();
+			d.innerHTML = "蘇咪摩亞...";
+			d.id = j.response.page;
 			d.onclick = function() {
+				var posts = $.querySelector('#post_data');
+				//console.log(posts.lastChild);
+				while(1) {
+					if(posts.lastChild == this) break;
+					posts.removeChild(posts.lastChild);
+				}
 				//var ts = document.body.scrollTop;
 				//apps.removeChild(this);
+				POST_PAGE = this.id;
 				POST_PAGE++;
 				_load_thread(j.response.thread_id,POST_PAGE);
+				this.parentElement.removeChild(this);
 				//document.body.scrollTop = ts;
-				this.onclick = null;
+				//this.onclick = null;
+				//this.innerHTML = this.innerHTML.substr(5);
 			};
+			post_data.appendChild(d);
+		}
+		else
+		{
+			let d = $.createElement('div');
+			d.style.minHeight = '15mm';
+			d.style.clear = 'both';
+			d.style.backgroundColor = '#eee';
 			post_data.appendChild(d);
 		}
 	}).catch(function(err) {
@@ -281,10 +334,12 @@ function _load_thread(tid,page) {
 }
 function cboCategory_change(e){
 	PAGE = 1;POST_PAGE=1;
+	_hideAll();_enable_scroll();
 	$.querySelector('#post_data').innerHTML = "";
-	$.querySelector('#posts').style.display = "none";
+	//$.querySelector('#posts').style.display = "none";
 	//$.querySelector('#post_data').style.display = "none";
 	$.querySelector('#apps').innerHTML = "";
+	$.querySelector('#apps').style.display = "block";
 	/**
 	 * fetch thread list(page 1)
 	 */
@@ -293,40 +348,366 @@ function cboCategory_change(e){
 		1
 	);
 }
+function btnImgLoad_click(e) {
+	$.querySelector('div#post_data').querySelectorAll('img').forEach(function(a,b){
+		if(a.className==="hkgmoji") return;
+		a.src = a.alt;
+		a.onclick = null;
+	});
+}
+function btnQuoteReply_click(e) {
+	let d = e.nextElementSibling.cloneNode(true);
+	d.innerHTML = htmlToBBCode(d.innerHTML);
+	d.querySelectorAll("span").forEach(function(item,index) {
+		// color, font size
+		const sizes = {
+			'x-small': 1,
+			'small': 2,
+			'medium': 3,
+			'large': 4,
+			'x-large': 5,
+			'xx-large': 6,
+		};
+		  /* eslint no-cond-assign: 0 */
+		const color = item.style.color;
+		const fontSize = item.style.fontSize;
+		if (color) {
+		  item.outerHTML = `[${ color }]${ item.innerHTML }[/${ color }]`;
+		} else if (fontSize) {
+		  let size = 'size=' + sizes[fontSize];
+		  item.outerHTML = `[${ size }]${ item.innerHTML }[/${ size }]`;
+		}
+	});
+	d.querySelectorAll("img").forEach(function(item,index) {
+		if(item.className === "hkgmoji") return;
+		if(item.alt.length > 0) item.src = item.alt;
+		//item.outerHTML = "<span>{0}</span>".format(item.src);
+		item.outerHTML = `[img]${ item.src }[/img]`;
+	});
+	d.querySelectorAll("img.hkgmoji").forEach(function(item,index) {
+		const normal = {
+		'/normal/smile.gif': ':)',
+		'/normal/angel.gif': 'O:-)',
+		'/normal/dead.gif': 'xx(',
+		'/normal/clown.gif': ':o)',
+		'/normal/frown.gif': ':-(',
+		'/normal/cry.gif': ':~(',
+		'/normal/wink.gif': ';-)',
+		'/normal/angry.gif': ':-[',
+		'/normal/devil.gif': ':-]',
+		'/normal/biggrin.gif': ':D',
+		'/normal/oh.gif': ':O',
+		'/normal/tongue.gif': ':P',
+		'/normal/kiss.gif': '^3^',
+		'/normal/wonder.gif': '?_?',
+		'/normal/agree.gif': '#yup#',
+		'/normal/donno.gif': '#ng#',
+		'/normal/hehe.gif': '#hehe#',
+		'/normal/love.gif': '#love#',
+		'/normal/surprise.gif': '#oh#',
+		'/normal/chicken.gif': '#cn#',
+		'/normal/ass.gif': '#ass#',
+		'/normal/sosad.gif': '[sosad]',
+		'/normal/good.gif': '#good#',
+		'/normal/hoho.gif': '#hoho#',
+		'/normal/kill.gif': '#kill#',
+		'/normal/bye.gif': '#bye#',
+		'/normal/z.gif': 'Z_Z',
+		'/normal/@.gif': '@_@',
+		'/normal/adore.gif': '#adore#',
+		'/normal/wonder2.gif': '#???#',
+		'/normal/banghead.gif': '[banghead]',
+		'/normal/bouncer.gif': '[bouncer]',
+		'/normal/bouncy.gif': '[bouncy]',
+		'/normal/offtopic.gif': '[offtopic]',
+		'/normal/censored.gif': '[censored]',
+		'/normal/flowerface.gif': '[flowerface]',
+		'/normal/shocking.gif': '[shocking]',
+		'/normal/photo.gif': '[photo]',
+		'/normal/fire.gif': '#fire#',
+		'/normal/yipes.gif': '[yipes]',
+		'/normal/369.gif': '[369]',
+		'/normal/bomb.gif': '[bomb]',
+		'/normal/slick.gif': '[slick]',
+		'/normal/fuck.gif': '#fuck#',
+		'/normal/no.gif': '#no#',
+		'/normal/kill2.gif': '#kill2#',
+		'/normal/dislike.gif': '#dislike#',
+		'/normal/like.gif': '#like#',
+		};
+
+		const big = {
+		'/big/smile.gif': '#:)#b',
+		'/big/angel.gif': '#O:-)#b',
+		'/big/dead.gif': '#xx(#b',
+		'/big/clown.gif': '#:o)#b',
+		'/big/frown.gif': '#:-(#b',
+		'/big/cry.gif': '#:~(#b',
+		'/big/wink.gif': '#;-)#b',
+		'/big/angry.gif': '#:-[#b',
+		'/big/devil.gif': '#:-]#b',
+		'/big/biggrin.gif': '#:D#b',
+		'/big/oh.gif': '#:O#b',
+		'/big/tongue.gif': '#:P#b',
+		'/big/kiss.gif': '#^3^#b',
+		'/big/wonder.gif': '#?_?#b',
+		'/big/agree.gif': '#yup#b',
+		'/big/donno.gif': '#ng#b',
+		'/big/hehe.gif': '#hehe#b',
+		'/big/love.gif': '#love#b',
+		'/big/surprise.gif': '#oh#b',
+		'/big/chicken.gif': '#cn#b',
+		'/big/ass.gif': '#ass#b',
+		'/big/sosad.gif': '#[sosad]#b',
+		'/big/good.gif': '#good#b',
+		'/big/hoho.gif': '#hoho#b',
+		'/big/kill.gif': '#kill#b',
+		'/big/bye.gif': '#bye#b',
+		'/big/z.gif': '#Z_Z#b',
+		'/big/@.gif': '#@_@#b',
+		'/big/adore.gif': '#adore#b',
+		'/big/wonder2.gif': '#???#b',
+		'/big/banghead.gif': '#[banghead]#b',
+		'/big/bouncer.gif': '#[bouncer]#b',
+		'/big/bouncy.gif': '#[bouncy]#b',
+		'/big/offtopic.gif': '#[offtopic]#b',
+		'/big/censored.gif': '#[censored]#b',
+		'/big/flowerface.gif': '#[flowerface]#b',
+		'/big/shocking.gif': '#[shocking]#b',
+		'/big/photo.gif': '#[photo]#b',
+		'/big/fire.gif': '#fire#b',
+		'/big/yipes.gif': '#[yipes]#b',
+		'/big/369.gif': '#[369]#b',
+		'/big/bomb.gif': '#[bomb]#b',
+		'/big/slick.gif': '#[slick]#b',
+		'/big/fuck.gif': '#fuck#b',
+		'/big/no.gif': '#no#b',
+		'/big/kill2.gif': '#kill2#b',
+		'/big/like.gif': '#like#b',
+		'/big/dislike.gif': '#dislike#b',
+		'/big/lomore_agree.gif': '#yup#lm#b',
+		'/big/lomore_bouncer.gif': '#bouncer#lm#b',
+		'/big/lomore_bye.gif': '#bye#lm#b',
+		'/big/lomore_shocking.gif': '#shocking#lm#b',
+		};
+
+		const sad = {
+		'/fs/smile.gif': '#:)#fs',
+		'/fs/angel.gif': '#O:-)#fs',
+		'/fs/dead.gif': '#xx(#fs',
+		'/fs/clown.gif': '#:o)#fs',
+		'/fs/wink.gif': '#;-)#fs',
+		'/fs/angry.gif': '#:-[#fs',
+		'/fs/devil.gif': '#:-]#fs',
+		'/fs/biggrin.gif': '#:D#fs',
+		'/fs/oh.gif': '#:O#fs',
+		'/fs/tongue.gif': '#:P#fs',
+		'/fs/kiss.gif': '#^3^#fs',
+		'/fs/wonder.gif': '#?_?#fs',
+		'/fs/agree.gif': '#yup#fs',
+		'/fs/love.gif': '#love#fs',
+		'/fs/chicken.gif': '#cn#fs',
+		'/fs/sosad.gif': '#[sosad]#fs',
+		'/fs/good.gif': '#good#fs',
+		'/fs/hoho.gif': '#hoho#fs',
+		'/fs/kill.gif': '#kill#fs',
+		'/fs/bye.gif': '#bye#fs',
+		'/fs/adore.gif': '#adore#fs',
+		'/fs/wonder2.gif': '#???#fs',
+		'/fs/bouncer.gif': '#[bouncer]#fs',
+		'/fs/bouncy.gif': '#[bouncy]#fs',
+		'/fs/offtopic.gif': '#[offtopic]#fs',
+		'/fs/censored.gif': '#[censored]#fs',
+		'/fs/flowerface.gif': '#[flowerface]#fs',
+		'/fs/shocking.gif': '#[shocking]#fs',
+		'/fs/369.gif': '#[369]#fs',
+		'/fs/bomb.gif': '#[bomb]#fs',
+		'/fs/fuck.gif': '#fuck#fs',
+		'/fs/no.gif': '#no#fs',
+		'/fs/kill2.gif': '#kill2#fs',
+		'/fs/battle.gif': '#battle#fs',
+		'/fs/south_bear.gif': '#bear#fs',
+		'/fs/want_die.gif': '#die#fs',
+		'/fs/fozen_smile.gif': '#:)#ice#fs',
+		'/fs/green_cap.gif': '#gcap#fs',
+		'/fs/green_cap_2.gif': '#gcap2#fs',
+		'/fs/green_cap_3.gif': '#gcap3#fs',
+		'/fs/jj.gif': '#jj#fs',
+		'/fs/lomore_hoho.gif': '#hoho#lm#fs',
+		'/fs/lomore_kill.gif': '#kill#lm#fs',
+		'/fs/lomore_smile.gif': '#:)#lm#fs',
+		'/fs/poison.gif': '#poison#fs',
+		'/fs/pokemon_1.gif': '#poke1#fs',
+		'/fs/pokemon_2.gif': '#poke2#fs',
+		'/fs/smile_big.gif': '#:)#b#fs',
+		'/fs/superman.gif': '#superman#fs',
+		};
+		let s1  = item.src.indexOf("/normal");
+		let s2  = item.src.indexOf("/big");
+		let s3  = item.src.indexOf("/fs");
+		if(s1 > -1) item.outerHTML = `${normal[item.src.substr(s1)]}`;
+		if(s2 > -1) item.outerHTML = `${item.src.substr(s2)}`;
+		if(s3 > -1) item.outerHTML = `${item.src.substr(s3)}`;
+	});
+	let txt = $.querySelector('form#frmReply > textarea#content');
+	txt.value += `[quote]${d.innerHTML}[/quote]\n`;
+	//$.querySelector('div#frmReply').show();
+}
+function _disable_scroll() {
+	$.querySelector("body").className = 'stop-scrolling';
+	//$.querySelector("body").bind('touchmove', function(e){e.preventDefault()});
+}
+function _enable_scroll() {
+	$.querySelector("body").className = '';
+	//$.querySelector("body").unbind('touchmove');
+}
+function _hideAll() {
+	//$.querySelector('#posts').style.display = "none";
+	$.querySelector('#posts').hide();
+}
+function _close_post_window() {
+	_hideAll();
+	$.querySelector('#post_data').innerHTML='';
+	$.querySelector('#apps').show();
+	_enable_scroll();
+}
+function _logout() {
+	localStorage.removeItem('uinf');
+}
+function _login(uid, pwd,func) {
+	const deviceToken = localStorage.getItem('dt');
+	if (!deviceToken) {
+		const possible = '0123456789abcdef';
+		let text = '';
+		for (let i = 0; i < 40; i++) {
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+		localStorage.setItem('dt', text);
+	}
+	//console.log('dt',localStorage.getItem('dt'));
+	let request = new Request('https://lihkg.daarj.com//mirror/auth/login', {
+	//var request = new Request('https://lihkg.com/api_v1/auth/login', {
+		method: 'POST', 
+		mode: 'cors',
+		headers: new Headers({
+			
+			'X-DEVICE': localStorage.getItem('dt')
+		}),
+		body: JSON.stringify({
+			email: uid,
+			password: pwd,
+		})
+	});
+	fetch(request).then(function(result) {
+		console.log("fetch request");
+		console.log(result);
+		//console.log(result.text());
+		
+		return result.json();
+	}).then(function(result) {
+		console.log("_login > return result");
+		if(result.success) {
+			localStorage.setItem('uinf', JSON.stringify(result.response));
+			//console.log(JSON.stringify(result.response));
+			UINF = result.response;
+		} else {
+			console.log(result.error_message);
+		}
+		return 0;
+	}).then(func).catch(function(err) {
+		// Error :(
+		console.log(err);
+	});
+}
+/*  https://gist.github.com/soyuka/6183947  */
+function  htmlToBBCode(html) {
+	// extra lines
+  html = html.replace(/<br(.*?)>/gi, '');
+  html = html.replace(/\n/g, '[br]');
+
+  // quote & format
+  html = html.replace(/<blockquote>/gi, '[quote]');
+  html = html.replace(/<\/blockquote>/gi, '[/quote]');
+  html = html.replace(/<strong>/gi, '[b]');
+  html = html.replace(/<\/strong>/gi, '[/b]');
+  html = html.replace(/<em>/gi, '[i]');
+  html = html.replace(/<\/em>/gi, '[/i]');
+  html = html.replace(/<del>/gi, '[s]');
+  html = html.replace(/<\/del>/gi, '[/s]');
+  html = html.replace(/<ins>/gi, '[u]');
+  html = html.replace(/<\/ins>/gi, '[/u]');
+
+  // list
+  html = html.replace(/<ul(.*?)>/gi, '[list]');
+  html = html.replace(/<li>(.*?)\n/gi, '[*]$1\n');
+  html = html.replace(/<\/ul>/gi, '[/list]');
+
+  // url
+  html = html.replace(/<a(.*?)>(.*?)<\/a>/gi, '[url]$2[/url]');
+
+  html = html.replace(/\[br\]/g, '\n');
+  return html;
+}
 </script>
 
 <body style="margin:auto;margin-top: 12mm">
 	<div class="g" style="position:fixed;left:0;top:0;width:100%;height:10mm;padding:0;background-color:#CCF">
-		<div class="u-1" style="text-align:middle;height:100%;">
+		<div class="u-7-8" style="text-align:middle;height:100%;">
 			<form onsubmit="false">
-				<select id="cboCategory" name="cboCategory" style="width:100%;height:100%" onchange="cboCategory_change(this);">
+				<select id="cboCategory" name="cboCategory" style="width:100%;height:100%;text-align:middle" onchange="cboCategory_change(this);">
 				</select>
 			</form>
 		</div>
+		<div class="u-1-8" style="text-align:middle;height:100%;">
+			<form onsubmit="false">
+				<input type="button" id="btnForumGo" name="btnForumGo" style="width:100%;height:100%" value="GO!" onclick="cboCategory_change($.querySelector('#cboCategory'))" />
+			</form>
+		</div>
 	</div>
-	<div id="posts" style="position:fixed;left:0;top:10mm;right:0;bottom:0;background-color:#FFF;display:none;overflow:scroll">
+	<div id="posts" style="position:fixed;left:0;right:0;bottom:0;top:10mm;background-color:#FFF;display:none;overflow:scroll">
 		<div id="post_head" class="g" style="min-height:10mm;text-align:center;background-color:#FFF"></div>
 		<div id="post_data"></div>
-		<div style="min-height:10mm;text-align:center;background-color:#CCF;clear:both" onclick="this.parentNode.style.display = 'none';querySelector('#post_data').innerHTML='';">關閉</div>
+		<div style="opacity: 0.8;position: fixed;left:5mm;bottom:5mm;font-size:6mm;width:12mm;line-height:12mm;text-align:center;;clear:both" >
+			<div style="background-color:#CCF;border-radius:5mm;margin-bottom:1mm;height:12mm;" onclick="btnImgLoad_click(this)">圖</div>
+		</div>
+		<div style="opacity: 0.8;position: fixed;left:18mm;bottom:5mm;font-size:6mm;width:12mm;line-height:12mm;text-align:center;;clear:both" >
+			<div id="btnStoryMode" style="background-color:#CCF;border-radius:5mm;margin-bottom:1mm;height:12mm;">故</div>
+		</div>
+		<div style="opacity: 0.8;position: fixed;right:5mm;bottom:5mm;font-size:6mm;width:12mm;line-height:12mm;text-align:center;;clear:both" >
+			<div style="background-color:#CCF;border-radius:5mm;margin-bottom:1mm;height:12mm" onclick="_close_post_window()">X</div>
+		</div>
 	</div>
 	<div id="apps" style="max-width:1080;margin:auto" class="g">
 	</div>
+	<!-- menu -->
 	<!--template data, no display-->
-	<div id="tpl_thread_list" class="g" style="display:none;min-height:10mm;padding:3mm">
-		<div class="u-3-4">作者:{1},正皮:{3},負皮:{4},回覆:{5}</div>
-		<div class="u-1-4" style="text-align:right">{2}</div>
-		<div class="u-1">{0}</div>
+	<div id="tpl_thread_list" class="g" style="display:none;min-height:10mm;padding:2mm">
+		<div class="u-1-8" style="text-align: center;vertical-align: middle;font-size:6mm;line-height:1cm;;height:1cm">{3}</div>
+		<div class="u-3-4">
+			<div class="u-5-8">作者:{1},回覆:{4}</div>
+			<div class="u-3-8" style="text-align:right">{2}</div>
+			<div class="u-1" style="font-size:4mm">{0}</div>
+		</div>
+		<div class="u-1-8" style="text-align:right;height:auto">
+				<form onsubmit="return false;">
+					<select style="margin-left:auto;height:auto;display:none;width:78%">
+						<option value="1" selected>1</option>
+					</select>
+				</form>
+			</div>
 		<div class="u-1" style="height:1;background-color:#ccc"></div>
 	</div>
-	<div id="tpl_post_head" style="display:none">
-		<div class="u-1">{0}</div>
+	<div id="tpl_thread_next" style="display:none;height:15mm;font-size:15mm;line-height:15mm;text-align:center;clear:both;background-color:#FCF">
+	</div>
+	<div id="tpl_post_head" style="display:none;">
+		<div class="u-1" style="font-size:5mm">{0}</div>
 		<div class="u-1-4">作者:{3}</div>
-		<div class="u-1-4">正評:{1},負評:{2}</div>
 		<div class="u-1-2"></div>
+		<div class="u-1-4" style="text-align:right">正評:{1},負評:{2}</div>
 	</div>
 	<div id="tpl_post_data" class="g" style="display:none;min-height:10mm;padding:3mm;margin-bottom:1mm">
-		<div class="u-1-2">#{0}:{1}</div>
-		<div class="u-1-2">{2}</div>
+		<div class="u-3-4">#{0}:{1} on {2}</div>
+		<div class="u-1-4" style="text-align:right"> </div>
 		<div class="u-1">{3}</div>
 		<div class="u-1" style="height:1px;background-color:#ccc"></div>
 	</div>
